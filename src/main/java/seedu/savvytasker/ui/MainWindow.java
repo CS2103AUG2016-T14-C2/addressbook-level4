@@ -1,3 +1,5 @@
+//@@author A0138431L
+
 package seedu.savvytasker.ui;
 
 import java.util.ArrayList;
@@ -7,19 +9,18 @@ import java.util.Date;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import seedu.savvytasker.commons.core.Config;
 import seedu.savvytasker.commons.core.GuiSettings;
 import seedu.savvytasker.commons.events.ui.ExitAppRequestEvent;
 import seedu.savvytasker.logic.Logic;
 import seedu.savvytasker.model.UserPrefs;
 import seedu.savvytasker.model.task.ReadOnlyTask;
-
-//@@author A0138431L
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -39,16 +40,18 @@ import seedu.savvytasker.model.task.ReadOnlyTask;
  */
 public class MainWindow extends UiPart {
 
-    private static final String ICON = "/images/address_book_32.png";
-    private static final String FXML = "MainWindow.fxml";
-    public static final int MIN_HEIGHT = 600;
-    public static final int MIN_WIDTH = 850;
+	private static final String ICON = "/images/savvytasker-icon.png";
+	private static final Image image = new Image(MainWindow.class.getResourceAsStream(ICON));
+	private static final String FXML = "MainWindow.fxml";
+	public static final int MIN_HEIGHT = 700;
+	public static final int MIN_WIDTH = 1150;
 
-    private Logic logic;
-    Date date = new Date();
-    // Independent Ui parts residing in this Ui container
-    //private BrowserPanel browserPanel;
-    private TaskListPanel taskListPanel;
+	private Logic logic;
+	Date date = new Date();
+	private static int DAYS_OF_WEEK = 7;	
+
+	// Independent Ui parts residing in this Ui container
+	private TaskListPanel taskListPanel;
     private AliasSymbolListPanel aliasSymbolListPanel;
     private ResultDisplay resultDisplay;
     private StatusBarFooter statusBarFooter;
@@ -59,6 +62,8 @@ public class MainWindow extends UiPart {
 	private FloatingPanel floatingPanel;
     @FXML
 	private OverduePanel overduePanel;
+	@FXML
+	private DailyPanel dailyPanel;
 	@FXML
 	private UpcomingPanel upcomingPanel;
     
@@ -75,15 +80,10 @@ public class MainWindow extends UiPart {
     private AnchorPane commandBoxPlaceholder;
 
     @FXML
-    private MenuItem helpMenuItem;
-
-    @FXML
     private AnchorPane taskListPanelPlaceholder;
     
     @FXML
     private AnchorPane aliasSymbolListPanelPlaceholder;
-
-    private AnchorPane personListPanelPlaceholder;
 
     @FXML
     private AnchorPane resultDisplayPlaceholder;
@@ -94,15 +94,6 @@ public class MainWindow extends UiPart {
     @FXML
     private VBox listPanel;
 
-    @FXML 
-    private AnchorPane floatingPanelPlaceholder;
-    /*
-    @FXML 
-    private AnchorPane overduePanelPlaceholder;
-    
-    @FXML 
-    private AnchorPane upcomingPanelPlaceholder;
-*/
     public MainWindow() {
         super();
     }
@@ -141,24 +132,15 @@ public class MainWindow extends UiPart {
         scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
 
-        setAccelerators();
-    }
-
-    private void setAccelerators() {
-        helpMenuItem.setAccelerator(KeyCombination.valueOf("F1"));
     }
 
     void fillInnerParts() {
-        //browserPanel = BrowserPanel.load(browserPlaceholder);
         taskListPanel = TaskListPanel.load(primaryStage, getTaskListPlaceholder(), logic.getFilteredTaskList());
         aliasSymbolListPanel = AliasSymbolListPanel.load(primaryStage, getAliasSymbolPlaceholder(), logic.getAliasSymbolList());
         setDefaultView();
         resultDisplay = ResultDisplay.load(primaryStage, getResultDisplayPlaceholder());
         statusBarFooter = StatusBarFooter.load(primaryStage, getStatusbarPlaceholder(), config.getAddressBookFilePath());
         commandBox = CommandBox.load(primaryStage, getCommandBoxPlaceholder(), resultDisplay, logic);
-        floatingPanel = FloatingPanel.load(primaryStage, getFloatingPanelPlaceholder(), logic.getFilteredFloatingTasks());
-        overduePanel = OverduePanel.load(primaryStage, getOverduePanelPlaceholder(), logic.getFilteredOverdueTasks());
-        upcomingPanel = UpcomingPanel.load(primaryStage, getUpcomingPanelPlaceholder(), logic.getFilteredUpcomingTasks(date));
     }
     
         /**
@@ -192,6 +174,9 @@ public class MainWindow extends UiPart {
     private AnchorPane getCommandBoxPlaceholder() {
         return commandBoxPlaceholder;
     }
+	@FXML
+	private ImageView imageIcon;
+	
 
     private AnchorPane getStatusbarPlaceholder() {
         return statusbarPlaceholder;
@@ -209,17 +194,6 @@ public class MainWindow extends UiPart {
         return aliasSymbolListPanelPlaceholder;
     }
     
-    //private AnchorPane getOverduePanelPlaceholder() {
-      //  return overduePanelPlaceholder;
-    //}
-    
-    private AnchorPane getFloatingPanelPlaceholder() {
-        return floatingPanelPlaceholder;
-    }
-    
-    //private AnchorPane getUpcomingPanelPlaceholder() {
-      //  return upcomingPanelPlaceholder;
-    //}
     
     public void hide() {
         primaryStage.hide();
@@ -287,4 +261,116 @@ public class MainWindow extends UiPart {
     public void releaseResources() {
         //browserPanel.freeResources();
     }
+}
+	@FXML
+	private ImageView imageIcon;	@FXML 
+	private AnchorPane floatingPanelPlaceholder;
+
+	@FXML 
+	private AnchorPane overduePanelPlaceholder;
+
+	@FXML 
+	private AnchorPane day1PanelPlaceholder;
+	@FXML 
+	private AnchorPane day2PanelPlaceholder;
+	@FXML 
+	private AnchorPane day3PanelPlaceholder;
+	@FXML 
+	private AnchorPane day4PanelPlaceholder;
+	@FXML 
+	private AnchorPane day5PanelPlaceholder;
+	@FXML 
+	private AnchorPane day6PanelPlaceholder;
+	@FXML 
+	private AnchorPane day7PanelPlaceholder;
+
+	@FXML 
+	private AnchorPane upcomingPanelPlaceholder;
+
+		imageIcon.setImage(image);
+		commandBox.getCommandTextField().requestFocus();
+		floatingPanel = FloatingPanel.load(primaryStage, getFloatingPanelPlaceholder(), logic.getFilteredFloatingTasks());
+		overduePanel = OverduePanel.load(primaryStage, getOverduePanelPlaceholder(), logic.getFilteredOverdueTasks());
+		for(int i = 0; i < DAYS_OF_WEEK; i++) {
+			Date onDate = new Date();
+			onDate.setTime(date.getTime());
+			onDate = addDay(i, onDate);
+			dailyPanel = DailyPanel.load(primaryStage, getDailyPanelPlaceholder(i), logic.getFilteredDailyTasks(i, onDate), i, onDate);
+		}
+		upcomingPanel = UpcomingPanel.load(primaryStage, getUpcomingPanelPlaceholder(), logic.getFilteredUpcomingTasks(date));
+	}
+
+
+	private AnchorPane getFloatingPanelPlaceholder() {
+		return floatingPanelPlaceholder;
+	}
+
+	private AnchorPane getOverduePanelPlaceholder() {
+		return overduePanelPlaceholder;
+	}
+
+	private AnchorPane getDailyPanelPlaceholder(int index) {
+
+		switch(index) {
+
+		case 0: 
+
+			return day1PanelPlaceholder;
+
+		case 1: 
+
+			return day2PanelPlaceholder;
+
+		case 2: 
+
+			return day3PanelPlaceholder;
+
+		case 3: 
+
+			return day4PanelPlaceholder;
+
+		case 4: 
+
+			return day5PanelPlaceholder;
+
+		case 5: 
+
+			return day6PanelPlaceholder;
+
+		case 6: 
+
+			return day7PanelPlaceholder;
+
+		default:
+
+			return day1PanelPlaceholder;
+		}
+
+	}
+
+	private AnchorPane getUpcomingPanelPlaceholder() {
+		return upcomingPanelPlaceholder;
+	}
+
+	private Date addDay(int i, Date date) {
+
+		//convert date object to calendar object and add 1 days
+		Calendar calendarExpectedDate = Calendar.getInstance();
+		calendarExpectedDate.setTime(date);
+		calendarExpectedDate.add(Calendar.DATE, i);
+
+		//convert calendar object back to date object
+		date = calendarExpectedDate.getTime();
+
+		return date;
+	}
+
+	public void hideHelp() {
+		HelpWindow helpWindow = HelpWindow.load(primaryStage);
+		helpWindow.hide();
+	}
+	public TaskListPanel getPersonListPanel() {
+		return this.taskListPanel;
+	}
+
 }

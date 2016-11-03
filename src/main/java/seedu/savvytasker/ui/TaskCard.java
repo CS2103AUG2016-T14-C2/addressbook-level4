@@ -9,6 +9,9 @@ import seedu.savvytasker.model.task.ReadOnlyTask;
 public class TaskCard extends UiPart{
 
     private static final String FXML = "TaskListCard.fxml";
+    public static final String LOW_PRIORITY_BACKGROUND = "-fx-background-color:#CEFFDC";
+    public static final String MEDIUM_PRIORITY_BACKGROUND = "-fx-background-color:#FFFED8";
+    public static final String HIGH_PRIORITY_BACKGROUND = "-fx-background-color:#FF8180";
 
     @FXML
     private HBox cardPane;
@@ -38,12 +41,32 @@ public class TaskCard extends UiPart{
         taskName.setText(task.getTaskName());
         id.setText(displayedIndex + ". ");
         details.setText(task.getTextForUi());
+        setCardBackground();
     }
 
     public HBox getLayout() {
         return cardPane;
     }
-
+    
+    private void setCardBackground() {
+    	
+        if (task.getPriority().toString().equals("High")) {
+        	
+            cardPane.setStyle(HIGH_PRIORITY_BACKGROUND);
+        
+        } else if (task.getPriority().toString().equals("Medium"))  {
+         
+        	cardPane.setStyle(MEDIUM_PRIORITY_BACKGROUND);
+       
+        } else if (task.getPriority().toString().equals("Low"))  {
+        
+        	cardPane.setStyle(LOW_PRIORITY_BACKGROUND);
+      
+        }
+        
+    }
+    
+    
     @Override
     public void setNode(Node node) {
         cardPane = (HBox)node;
