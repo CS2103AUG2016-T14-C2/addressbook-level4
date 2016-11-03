@@ -64,18 +64,18 @@ public class StorageManagerTest {
         storageManager.saveSavvyTasker(original);
         ReadOnlySavvyTasker retrieved = storageManager.readSavvyTasker().get();
         assertEquals(original, new SavvyTasker(retrieved));
-        //More extensive testing of AddressBook saving/reading is done in XmlAddressBookStorageTest
+        //More extensive testing of SavvyTasker saving/reading is done in XmlSavvyTaskerStorageTest
     }
 
     @Test
-    public void getAddressBookFilePath(){
+    public void getSavvyTaskerFilePath(){
         assertNotNull(storageManager.getSavvyTaskerFilePath());
     }
 
     @Test
     public void handleSavvyTaskerChangedEvent_exceptionThrown_eventRaised() throws IOException {
         //Create a StorageManager while injecting a stub that throws an exception when the save method is called
-        Storage storage = new StorageManager(new XmlAddressBookStorageExceptionThrowingStub("dummy"), new JsonUserPrefsStorage("dummy"));
+        Storage storage = new StorageManager(new XmlSavvyTaskerStorageExceptionThrowingStub("dummy"), new JsonUserPrefsStorage("dummy"));
         EventsCollector eventCollector = new EventsCollector();
         storage.handleSavvyTaskerChangedEvent(new SavvyTaskerChangedEvent(new SavvyTasker()));
         assertTrue(eventCollector.get(0) instanceof DataSavingExceptionEvent);
@@ -85,9 +85,9 @@ public class StorageManagerTest {
     /**
      * A Stub class to throw an exception when the save method is called
      */
-    class XmlAddressBookStorageExceptionThrowingStub extends XmlSavvyTaskerStorage{
+    class XmlSavvyTaskerStorageExceptionThrowingStub extends XmlSavvyTaskerStorage{
 
-        public XmlAddressBookStorageExceptionThrowingStub(String filePath) {
+        public XmlSavvyTaskerStorageExceptionThrowingStub(String filePath) {
             super(filePath);
         }
 

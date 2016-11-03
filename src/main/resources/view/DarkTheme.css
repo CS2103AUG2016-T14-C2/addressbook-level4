@@ -122,11 +122,14 @@
 }
 
 .result-display {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #8F9396;
+}
+.result-display .content {
+	-fx-background-color: #8F9396;
 }
 
 .result-display .label {
-    -fx-text-fill: black !important;
+    -fx-text-fill: white;
 }
 
 .status-bar .label {
@@ -287,7 +290,13 @@
     -fx-effect: innershadow(gaussian, black, 10, 0, 0, 0);
 }
 
+#taskListView {
+	-fx-background-color: transparent;
+}
 
+#commandTextField {
+	-fx-background-color: #8F9396;
+}
 /*------------------------------------------ OverduePanel Styling ------------------------------------------*/
 
 .overdue-scrollpane, .overdue-panel {
